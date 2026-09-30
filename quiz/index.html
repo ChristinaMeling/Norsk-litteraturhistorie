@@ -1,1 +1,551 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+  <meta charset="UTF-8">
+  <title>Norsk litteraturhistorie – interaktiv side</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Nunito:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f3f0;
+      --primary: #1f4b5c;
+      --accent: #c75b39;
+      --light: #ffffff;
+      --dark: #1b1b1b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+    }
+
+    header {
+      background: linear-gradient(135deg, #1f4b5c, #355c7d);
+      color: var(--light);
+      padding: 2rem 3rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    header img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 16px;
+      border: 3px solid rgba(255,255,255,0.7);
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      margin: 0 0 0.5rem;
+    }
+
+    header p {
+      margin: 0;
+      max-width: 600px;
+      font-size: 1rem;
+    }
+
+    main {
+      padding: 2rem 3rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section {
+      margin-bottom: 2.5rem;
+      background: var(--light);
+      border-radius: 16px;
+      padding: 1.5rem 1.8rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    /* Tidslinje */
+    .timeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline button {
+      flex: 1 1 180px;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      border: 2px solid var(--primary);
+      background: var(--light);
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .timeline button.active,
+    .timeline button:hover {
+      background: var(--primary);
+      color: var(--light);
+    }
+
+    .period-content {
+      border-radius: 12px;
+      background: #f8f8f8;
+      padding: 1rem 1.2rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .period-content h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .period-content p {
+      margin: 0.4rem 0;
+    }
+
+    /* Full tekst */
+    #full-text {
+      max-height: 350px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      line-height: 1.5;
+    }
+
+    #full-text h3 {
+      margin-top: 1.2rem;
+      color: var(--primary);
+    }
+
+    #full-text p {
+      margin: 0.4rem 0;
+    }
+
+    /* Quiz */
+    .quiz-question {
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .quiz-question h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1rem;
+    }
+
+    .quiz-options label {
+      display: block;
+      margin-bottom: 0.3rem;
+      cursor: pointer;
+    }
+
+    .quiz-options input {
+      margin-right: 0.4rem;
+    }
+
+    #quiz-result {
+      margin-top: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .quiz-actions {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .quiz-actions button {
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--light);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: var(--dark);
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem 2rem 2rem;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      main {
+        padding: 1.5rem 1.2rem 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <!-- Bytt ut bildet med noe typisk norskfag: bøker, natur, stavkirke osv. -->
+  <img src="https://images.pexels.com/photos/46274/pexels-photo-46274.jpeg" alt="Norsk natur og bøker">
+  <div>
+    <h1>Norsk litteraturhistorie</h1>
+    <p>
+      Fra norrøn tid til i dag – en interaktiv oversikt for elever på VG1.
+      Klikk deg gjennom tidslinjen, les fagteksten og test deg selv i quizen.
+    </p>
+  </div>
+</header>
+
+<main>
+  <!-- TIDSLINJE -->
+  <section>
+    <h2>Tidslinje over norsk litteraturhistorie</h2>
+    <p>Klikk på en periode for å se korte sammendrag av samfunnsforhold og litteratur.</p>
+
+    <div class="timeline">
+      <button class="active" data-period="norron">Norrøn tid (800–1350)</button>
+      <button data-period="renessanse">Humanisme og renessanse (1350–1600)</button>
+      <button data-period="barokk">Barokken (1600–1750)</button>
+      <button data-period="opplysning">Opplysningstiden (1700-tallet)</button>
+      <button data-period="romantikk">Romantikken (1800–1850)</button>
+      <button data-period="realisme">Realisme og naturalisme (1850–1890)</button>
+      <button data-period="nyromantikk">Nyromantikk og tidlig modernisme (1890–1905)</button>
+    </div>
+
+    <div id="period-info" class="period-content">
+      <!-- Default: norrøn tid -->
+      <h3>Norrøn tid (800–1350)</h3>
+      <p>
+        «Den norrøne tidsperioden tar for seg om lag 600 år, og perioden blir i historisk
+        sammenheng delt i to: vikingtiden (frem til ca. 1050) og gammelnorsk tid (frem til ca. 1350).»
+      </p>
+      <p>
+        Samfunnet preges av vikingtokter, landnåmstid på Island og senere kristningen av Norden.
+        Med kristendommen kommer skrivekunsten og det latinske alfabetet.
+      </p>
+      <p>
+        Litteraturen er først muntlig, senere nedskrevet av prester og munker på Island. Viktige verk er
+        <em>Den eldre Edda</em>, skaldekvadene, islendingesagaene, <em>Heimskringla</em> og <em>Den yngre Edda</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- FULL TEKST -->
+  <section>
+    <h2>Hele teksten: Norsk litteraturhistorie</h2>
+    <p>
+      Her kan elevene lese fagteksten i sammenheng. Du kan lime inn resten av dokumentet under
+      hvis du vil ha alt på én side.
+    </p>
+
+    <article id="full-text">
+      <h3>Norrøn tid (800–1350)</h3>
+      <p>
+        Den norrøne tidsperioden tar for seg om lag 600 år, og perioden blir i historisk
+        sammenheng delt i to: vikingtiden (frem til ca. 1050) og gammelnorsk tid (frem til ca. 1350).
+        I denne epoken blir Norge og Island regnet som ett felles område, og deler stort sett felles språk,
+        litteratur og mytologi.
+      </p>
+
+      <h3>Samfunnsforhold</h3>
+      <p>
+        Vikingtiden starter i 793 da vikingene plyndret det engelske klosteret Lindisfarne. Dette er et av de
+        første vikingtoktene som er nøyaktig dokumentert og datert. Plyndringen markerer starten på en epoke
+        fylt av handels- og plyndringstokter, først til øyene i nordsjøområdet, men også sørover i Europa.
+      </p>
+      <p>
+        Rundt år 1000 skjer det store endringer i landet. Vikingtoktene begynner å ta slutt og kristendommen
+        kommer til Norden. Med kristendommen, kommer også skrivekunsten og det latinske alfabetet. Det er disse
+        endringene som markerer slutten på vikingtiden og starten på gammelnorsk tid.
+      </p>
+
+      <h3>Norrøn mytologi</h3>
+      <p>
+        «Det er norrøn mytologi som er gudelæren som er utbredt i Norden før kristendommen ankom.
+        En viktig kilde til denne kunnskapen er Snorres Edda (1200-tallet).»
+      </p>
+      <p>
+        Verden er flat med havet omkring, Midgard i midten der menneskene bor, og Åsgard midt i Midgard
+        der æsene holder til. Yggdrasil, livstreet, står i Åsgard – så lenge det er friskt, går verden videre.
+      </p>
+
+      <h3>Norrøn litteratur</h3>
+      <p>
+        Norrøn litteratur er litteraturen skapt i Norge og på Island mellom perioden 800–1350, og blir
+        overlevert muntlig helt frem til 1200-tallet. Da begynner den å bli skrevet ned, og dette skjer i stor
+        grad av kristne prester og munker på Island.
+      </p>
+      <p>
+        Den eldre Edda består av rundt 30 dikt, delt i gudedikt og heltedikt. Kjente dikt er «Voluspå»,
+        «Trymskvida» og «Håvamål». Skaldekvadene er bruksdiktning som hyller personer eller heltedød, og
+        islendingesagaene skildrer ættefeider og maktkamp på Island.
+      </p>
+
+      <h3>Humanisme og renessanse (1350–1600)</h3>
+      <p>
+        Etter svartedauden og nedgangstidene i Norge oppstår renessansen og humanismen først i Italia.
+        «Det oppsto også en sterk interesse for gresk og romersk språk og litteratur, og dessuten for historie
+        og filosofi. Denne delen av renessansen kalles humanisme.»
+      </p>
+      <p>
+        I Norge får humanismen begrenset gjennomslag, men enkelte prester skriver historiske verk og skildringer
+        av dagligliv. Viktige tekster er <em>Bergens kapitelsbog</em>, <em>Vinjeboka</em> og visjonsdiktet
+        <em>Draumkvedet</em>.
+      </p>
+
+      <h3>Barokken (1600–1750)</h3>
+      <p>
+        Etter reformasjonen mister kirken noe makt, og kongene styrker sin posisjon. Fredrik 3. blir eneveldig
+        konge over Danmark-Norge i 1660. Samfunnet er hierarkisk, med kongen øverst og bønder og husmenn nederst.
+      </p>
+      <p>
+        Litteraturen er sterkt religiøs, og salmediktningen dominerer. Motivet er ofte dødstanken – alt skal forgå,
+        det virkelige livet er i himmelen. Thomas Kingo og Dorothe Engelbretsdotter er sentrale salmediktere.
+      </p>
+
+      <h3>Opplysningstiden (1700-tallet)</h3>
+      <p>
+        Borgerskapet vokser frem, og nye naturvitenskapelige oppdagelser utfordrer middelalderens tankesett.
+        Rasjonalisme og empirisme blir viktige begreper: fornuft og erfaring ses som grunnlag for kunnskap.
+      </p>
+      <p>
+        Ludvig Holberg er den viktigste forfatteren. Han skriver komedier, satire og romanen
+        <em>Niels Klims underjordiske rejse</em>. Komedien <em>Jeppe på berget</em> viser hvordan enkle bønder
+        kan misbruke makt når de plutselig får den.
+      </p>
+
+      <h3>Romantikken (1800–1850)</h3>
+      <p>
+        Etter 1814 vokser behovet for å markere norsk kultur, historie og språk. Romantikerne vender seg mot naturen
+        og folket, og nasjonalromantikken blir sterk i 1840-årene.
+      </p>
+      <p>
+        Asbjørnsen og Moe samler <em>Norske folkeeventyr</em> og bruker særnorske ord og setningsbygning.
+        Novellen <em>Luren</em> av Maurits Hansen regnes som den første bondefortellingen i norsk litteratur.
+      </p>
+
+      <h3>Realisme, naturalisme og det moderne gjennombruddet (1850–1890)</h3>
+      <p>
+        Industrialisering og urbanisering endrer samfunnet. Forfattere «setter problemer under debatt» og
+        kritiserer kjønnsroller, maktmisbruk og sosial urettferdighet.
+      </p>
+      <p>
+        Henrik Ibsen, Bjørnstjerne Bjørnson, Alexander Kielland og Jonas Lie blir kjent som «de fire store».
+        <em>Et dukkehjem</em> (Ibsen), <em>En god samvittighed</em> (Kielland) og <em>Karens jul</em> (Amalie Skram)
+        er sentrale verk.
+      </p>
+
+      <h3>Nyromantikk og tidlig modernisme (1890–1905)</h3>
+      <p>
+        Perioden preges av «fin de siècle» – både uro og forventning om nye tider. Nyromantikk, symbolisme,
+        heimstaddiktning og modernisme eksisterer side om side.
+      </p>
+      <p>
+        Symbolistene vil ikke etterlikne ytre virkelighet, men uttrykke stemninger og indre erfaringer. Heimstaddiktning
+        bruker forfatterens eget sted og miljø som utgangspunkt for diktningen.
+      </p>
+
+      <!-- Her kan du lime inn resten av dokumentet (1905–2020) om du vil ha alt med. -->
+    </article>
+  </section>
+
+  <!-- QUIZ -->
+  <section>
+    <h2>Quiz om norsk litteraturhistorie</h2>
+    <p>Test deg selv! Velg det svaret du mener er riktig, og trykk «Sjekk svar».</p>
+
+    <div id="quiz">
+      <div class="quiz-question" data-correct="b">
+        <h3>1. Hva markerer overgangen fra vikingtid til gammelnorsk tid?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q1" value="a"> Landnåmstid på Island</label>
+          <label><input type="radio" name="q1" value="b"> Innføringen av kristendommen og skrivekunsten</label>
+          <label><input type="radio" name="q1" value="c"> Svartedauden i 1349</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="c">
+        <h3>2. Hva kjennetegner norrøn litteratur stilistisk?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q2" value="a"> Lange setninger og mye indre monolog</label>
+          <label><input type="radio" name="q2" value="b"> Rim og regler uten handling</label>
+          <label><input type="radio" name="q2" value="c"> Underdrivelser og vekt på ytre handling</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="a">
+        <h3>3. Hvem regnes som den viktigste forfatteren i opplysningstiden i Danmark-Norge?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q3" value="a"> Ludvig Holberg</label>
+          <label><input type="radio" name="q3" value="b"> Henrik Ibsen</label>
+          <label><input type="radio" name="q3" value="c"> Thomas Kingo</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="b">
+        <h3>4. Hva er hovedforskjellen mellom realisme og naturalisme?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q4" value="a"> Realismen er mer pessimistisk enn naturalismen</label>
+          <label><input type="radio" name="q4" value="b"> Naturalismen ser mennesket som et produkt av arv og miljø</label>
+          <label><input type="radio" name="q4" value="c"> Realismen handler bare om natur og landskap</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="c">
+        <h3>5. Hva ville nasjonalromantikken i Norge blant annet gjøre?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q5" value="a"> Fjerne alle spor av folkekultur</label>
+          <label><input type="radio" name="q5" value="b"> Skrive bare om byliv og industri</label>
+          <label><input type="radio" name="q5" value="c"> Samle og løfte fram norske eventyr, sagn og viser</label>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-correct="a">
+        <h3>6. Hvilket verk hører til barokken?</h3>
+        <div class="quiz-options">
+          <label><input type="radio" name="q6" value="a"> Aftensalme av Dorothe Engelbretsdotter</label>
+          <label><input type="radio" name="q6" value="b"> Et dukkehjem av Henrik Ibsen</label>
+          <label><input type="radio" name="q6" value="c"> Norske folkeeventyr av Asbjørnsen og Moe</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="btn-primary" id="check-quiz">Sjekk svar</button>
+      <button class="btn-secondary" id="reset-quiz">Nullstill</button>
+    </div>
+
+    <div id="quiz-result"></div>
+  </section>
+</main>
+
+<footer>
+  Laget for VG1-elever – du kan fritt tilpasse tekst, farger og bilder.
+</footer>
+
+<script>
+  // Tidslinje-innhold
+  const periodTexts = {
+    norron: {
+      title: "Norrøn tid (800–1350)",
+      html: `
+        <p>Den norrøne tidsperioden deles i vikingtid og gammelnorsk tid. Norge og Island regnes som ett område med felles språk, litteratur og mytologi.</p>
+        <p>Vikingtokter, landnåmstid på Island og senere kristningen av Norden preger samfunnet. Med kristendommen kommer skrivekunsten og det latinske alfabetet.</p>
+        <p>Litteraturen er først muntlig, senere nedskrevet på Island. Viktige verk er Den eldre Edda, skaldekvadene, islendingesagaene, Heimskringla og Den yngre Edda.</p>
+      `
+    },
+    renessanse: {
+      title: "Humanisme og renessanse (1350–1600)",
+      html: `
+        <p>Svartedauden rammer Norge hardt, mens handel og kultur blomstrer i Italia. Der oppstår renessansen – en gjenfødelse av antikk kunst og tenkning.</p>
+        <p>Humanismen gir sterk interesse for gresk og romersk språk, litteratur, historie og filosofi. Mennesket og kunnskap står i sentrum.</p>
+        <p>I Norge får humanismen begrenset gjennomslag, men verk som Bergens kapitelsbog, Vinjeboka og Draumkvedet er viktige kilder til kultur- og sosialhistorie.</p>
+      `
+    },
+    barokk: {
+      title: "Barokken (1600–1750)",
+      html: `
+        <p>Eneveldig kongemakt og et hierarkisk samfunn preger perioden. Religion brukes til å legitimere makt.</p>
+        <p>Litteraturen er sterkt religiøs, med fokus på døden og himmelen som det virkelige livet. Språket er rikt, metaforisk og følelsesladet.</p>
+        <p>Thomas Kingo og Dorothe Engelbretsdotter er sentrale salmediktere. Aftensalme uttrykker både dødsangst og lengsel etter frelse.</p>
+      `
+    },
+    opplysning: {
+      title: "Opplysningstiden (1700-tallet)",
+      html: `
+        <p>Borgerskapet vokser frem, og nye naturvitenskapelige oppdagelser utfordrer gamle forestillinger. Rasjonalisme og empirisme blir viktige.</p>
+        <p>Ludvig Holberg skriver komedier, satire og romanen Niels Klims underjordiske rejse. Han vil både underholde og opplyse.</p>
+        <p>Jeppe på berget viser hvordan makt kan misbrukes, og kritiserer samfunnsforholdene i Danmark-Norge.</p>
+      `
+    },
+    romantikk: {
+      title: "Romantikken (1800–1850)",
+      html: `
+        <p>Etter 1814 vokser behovet for å markere norsk kultur, historie og språk. Romantikerne vender seg mot naturen og folket.</p>
+        <p>Nasjonalromantikken samler eventyr, sagn og viser. Asbjørnsen og Moe gir ut Norske folkeeventyr og bruker særnorske ord og setningsbygning.</p>
+        <p>Novellen Luren av Maurits Hansen regnes som den første bondefortellingen i norsk litteratur.</p>
+      `
+    },
+    realisme: {
+      title: "Realisme og naturalisme (1850–1890)",
+      html: `
+        <p>Industrialisering og urbanisering endrer samfunnet. Forfatterne setter problemer under debatt og kritiserer kjønnsroller, religion og maktmisbruk.</p>
+        <p>Realisme skildrer virkeligheten troverdig, mens naturalismen viser mennesket som et produkt av arv og miljø – ofte med tragiske utganger.</p>
+        <p>Et dukkehjem, En god samvittighed og Karens jul er sentrale verk som viser det moderne gjennombruddet.</p>
+      `
+    },
+    nyromantikk: {
+      title: "Nyromantikk og tidlig modernisme (1890–1905)",
+      html: `
+        <p>Fin de siècle-stemning: uro og forventning om nye tider. Flere retninger eksisterer side om side.</p>
+        <p>Nyromantikk, symbolisme og heimstaddiktning uttrykker indre erfaringer, stemninger og lokale miljøer.</p>
+        <p>Modernismen begynner å utfordre tradisjonelle former og temaer i litteraturen.</p>
+      `
+    }
+  };
+
+  const timelineButtons = document.querySelectorAll('.timeline button');
+  const periodInfo = document.getElementById('period-info');
+
+  timelineButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      timelineButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const key = btn.getAttribute('data-period');
+      const data = periodTexts[key];
+      periodInfo.innerHTML = `
+        <h3>${data.title}</h3>
+        ${data.html}
+      `;
+    });
+  });
+
+  // Quiz-logikk
+  const checkBtn = document.getElementById('check-quiz');
+  const resetBtn = document.getElementById('reset-quiz');
+  const quizResult = document.getElementById('quiz-result');
+
+  checkBtn.addEventListener('click', () => {
+    const questions = document.querySelectorAll('.quiz-question');
+    let correct = 0;
+    let total = questions.length;
+
+    questions.forEach((q, index) => {
+      const name = 'q' + (index + 1);
+      const selected = q.querySelector('input[name="' + name + '"]:checked');
+      const correctValue = q.getAttribute('data-correct');
+
+      if (selected && selected.value === correctValue) {
+        correct++;
+      }
+    });
+
+    quizResult.textContent = `Du fikk ${correct} av ${total} riktige.`;
+  });
+
+  resetBtn.addEventListener('click', () => {
+    const inputs = document.querySelectorAll('.quiz-question input[type="radio"]');
+    inputs.forEach(i => i.checked = false);
+    quizResult.textContent = "";
+  });
+</script>
+</body>
+</html>
 
