@@ -1,0 +1,18 @@
+norsk-litteraturhistorie/
+│
+├── index.html
+├── style.css
+├── script.js
+│
+├── bilder/
+│ ├── ibsen.jpg
+│ ├── hamsun.jpg
+│ └── fosse.jpg
+│
+├── epoker/
+│ ├── norron.html
+│ ├── romantikken.html
+│ ├── realismen.html
+│ └── modernismen.html
+│
+└── README.md
